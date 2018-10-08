@@ -1,0 +1,46 @@
+{
+  "name": "pr-gif-extension",
+  "version": "1.0.0",
+  "description": "Gif finder for Github prs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node_modules/.bin/webpack-dev-server --mode development --open --hot",
+    "build": "node_modules/.bin/webpack --config webpack.config.prod.babel.js --mode production",
+    "serve": "node_modules/.bin/http-server ./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bguzmanrio/pr-gif-extension.git"
+  },
+  "keywords": [
+    "gif",
+    "github",
+    "extension",
+    "chrome"
+  ],
+  "author": "bguzmanrio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bguzmanrio/pr-gif-extension/issues"
+  },
+  "homepage": "https://github.com/bguzmanrio/pr-gif-extension#readme",
+  "dependencies": {
+    "copy-webpack-plugin": "^4.5.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "html-webpack-plugin": "^3.2.0",
+    "http-server": "^0.11.1",
+    "script-ext-html-webpack-plugin": "^2.0.1",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9"
+  }
+}
