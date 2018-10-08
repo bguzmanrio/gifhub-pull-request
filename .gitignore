@@ -1,1 +1,9 @@
+## folders
 node_modules/
+dist/
+
+## locks
+package-lock.json
+
+## logs
+npm-debug.log
