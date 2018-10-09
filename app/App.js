@@ -50,7 +50,7 @@ class App extends Component {
 				{this.state.gifUrl && (
 					<Fragment>
 						<img src={this.state.gifUrl} />
-						<input ref={this.mdCodeRef} type="text" defaultValue={`![](${this.state.gifUrl}`} readOnly />
+						<input ref={this.mdCodeRef} type="text" defaultValue={`![](${this.state.gifUrl})`} readOnly />
 						<button onClick={this.handleMDCopy}>{this.state.copied ? 'Copied!' : 'Copy'}</button>
 					</Fragment>
 				)}
