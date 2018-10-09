@@ -7,10 +7,12 @@ class App extends Component {
 		this.state = {
 			gifUrl: null,
 			keyword: null,
-			copied: false
+			copied: false,
+			isLoaded: false
 		};
 
 		this.mdCodeRef = React.createRef();
+		this.handleImageLoad = this.handleImageLoad.bind(this);
 		this.handleGifRequest = this.handleGifRequest.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleMDCopy = this.handleMDCopy.bind(this);
@@ -19,10 +21,20 @@ class App extends Component {
 	handleGifRequest() {
 		const keyParam = 'api_key=VwV9rz5sgKf0uBViFwBlU9b8H3lmossH';
 		const params = this.state.keyword ? `tag=${this.state.keyword}&${keyParam}` : keyParam;
-		fetch(`https://api.giphy.com/v1/gifs/random?${params}`).then(res => res.json()).then(response => {
-			this.setState({
-				gifUrl: response.data.image_url
-			});
+		this.setState({
+			isLoaded: false
+		}, () => {
+			fetch(`https://api.giphy.com/v1/gifs/random?${params}`).then(res => res.json()).then(response => {
+				this.setState({
+					gifUrl: response.data.image_url
+				});
+			})
+		})
+	}
+
+	handleImageLoad() {
+		this.setState({
+			isLoaded: true
 		})
 	}
 
@@ -41,17 +53,27 @@ class App extends Component {
 	}
 
 	render() {
+		const imgStyles = {
+			display: this.state.isLoaded ? 'block' : 'none'
+		};
 
 		return (
-			<div>
-				<h1>GIFPRS</h1>
+			<div style={{width: '400px'}}>
+				<h1>GIFPRS -- GIFs on demand!</h1>
 				<input type="text" onChange={this.handleInputChange}></input>
 				<button onClick={this.handleGifRequest}>Get the gif!</button>
 				{this.state.gifUrl && (
 					<Fragment>
-						<img src={this.state.gifUrl} />
-						<input ref={this.mdCodeRef} type="text" defaultValue={`![](${this.state.gifUrl})`} readOnly />
-						<button onClick={this.handleMDCopy}>{this.state.copied ? 'Copied!' : 'Copy'}</button>
+						{!this.state.isLoaded && (
+							<div>Loading GIF...</div>
+            )}
+            <div style={imgStyles}>
+              <img src={this.state.gifUrl} onLoad={this.handleImageLoad}/>
+              <div>
+                <input ref={this.mdCodeRef} type="text" defaultValue={`![](${this.state.gifUrl})`} readOnly />
+                <button onClick={this.handleMDCopy}>{this.state.copied ? 'Copied!' : 'Copy'}</button>
+              </div>
+            </div>
 					</Fragment>
 				)}
 				
