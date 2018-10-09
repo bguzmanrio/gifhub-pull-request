@@ -1,9 +1,6 @@
 ## folders
-node_modules/
-dist/
-
-## locks
-package-lock.json
+node_modules
+dist
 
 ## logs
 npm-debug.log
