@@ -1,19 +1,22 @@
 import React, { Component, Fragment } from 'react';
 
-const prTitleRegExp = /PR[\s-]\d*[:]*[\s]*/gmi;
+import Button from './components/Button';
+import Input from './components/Input';
+import Block from './components/Block';
+import { MainTitle, SecondaryTitle } from './components/Title';
 
-function getPRTitle() {
-  const title = document.querySelector('#pull_request_title') || {};
-  return title.value || '';
-}
+import { getTitleFromPr, appendMDToPr } from './utils/domConnector';
 
-const parsePRTitle = prTitle => prTitle.replace(prTitleRegExp, '');
+import './styles';
+
+const getMDCode = url => `![](${url})`;
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       gifUrl: null,
+      mdCode: null,
       keyword: null,
       copied: false,
       isLoaded: false
@@ -24,16 +27,12 @@ class App extends Component {
     this.handleGifRequest = this.handleGifRequest.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleMDCopy = this.handleMDCopy.bind(this);
+    this.handleMDAppend = this.handleMDAppend.bind(this);
   }
 
   componentDidMount() {
-    chrome.tabs.executeScript({
-        code: '(' + getPRTitle + ')();' //argument here is a string but function.toString() returns function's code
-    }, (results) => {
-        //Here we have just the innerHTML and not DOM structure
-        this.setState({
-          keyword: parsePRTitle(results[0])
-        }, this.handleGifRequest);
+    getTitleFromPr().then(keyword => {
+      this.setState({ keyword }, this.handleGifRequest);
     });
   }
 
@@ -46,7 +45,8 @@ class App extends Component {
     }, () => {
       fetch(`https://api.giphy.com/v1/gifs/random?${params}`).then(res => res.json()).then(response => {
         this.setState({
-          gifUrl: response.data.images.downsized_large.url
+          gifUrl: response.data.images.downsized_large.url,
+          mdCode: getMDCode(response.data.images.downsized_large.url)
         });
       })
     })
@@ -72,16 +72,23 @@ class App extends Component {
     });
   }
 
+  handleMDAppend() {
+    appendMDToPr(this.state.mdCode).then(() => { console.log('done'); }).catch(e => { console.log(e) })
+  }
+
   render() {
     const imgStyles = {
-      display: this.state.isLoaded ? 'block' : 'none'
+      display: this.state.isLoaded ? 'block' : 'none',
+      textAlign: 'center'
     };
 
     return (
       <div style={{minWidth: '250px'}}>
-        <h1>GIFPRS -- GIFs on demand!</h1>
-        <input type="text" onChange={this.handleInputChange} defaultValue={this.state.keyword}></input>
-        <button onClick={this.handleGifRequest}>Get the gif!</button>
+        <MainTitle>Animate your PRs</MainTitle>
+        <Block>
+          <Input type="text" onChange={this.handleInputChange} defaultValue={this.state.keyword} />
+          <Button onClick={this.handleGifRequest}>Search!</Button>
+        </Block>
         {this.state.gifUrl && (
           <Fragment>
             {!this.state.isLoaded && (
@@ -89,10 +96,12 @@ class App extends Component {
             )}
             <div style={imgStyles}>
               <img src={this.state.gifUrl} onLoad={this.handleImageLoad}/>
-              <div>
-                <input ref={this.mdCodeRef} type="text" defaultValue={`![](${this.state.gifUrl})`} readOnly />
-                <button onClick={this.handleMDCopy}>{this.state.copied ? 'Copied!' : 'Copy'}</button>
-              </div>
+              <SecondaryTitle>MarkDown code</SecondaryTitle>
+              <Block vertical>
+                <Input ref={this.mdCodeRef} type="text" defaultValue={this.state.mdCode} readOnly vertical />
+                <Button vertical onClick={this.handleMDCopy}>{this.state.copied ? 'Copied!' : 'Copy'}</Button>
+                <Button vertical onClick={this.handleMDAppend}>Insert MD code</Button>
+              </Block>
             </div>
           </Fragment>
         )}
