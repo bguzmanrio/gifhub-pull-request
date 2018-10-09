@@ -3,7 +3,8 @@ import React, { Component, Fragment } from 'react';
 const prTitleRegExp = /PR[\s-]\d*[:]*[\s]*/gmi;
 
 function getPRTitle() {
-	return document.querySelector('#pull_request_title').value;
+	const title = document.querySelector('#pull_request_title') || {};
+	return title.value || '';
 }
 
 const parsePRTitle = prTitle => prTitle.replace(prTitleRegExp, '');
@@ -45,7 +46,7 @@ class App extends Component {
 		}, () => {
 			fetch(`https://api.giphy.com/v1/gifs/random?${params}`).then(res => res.json()).then(response => {
 				this.setState({
-					gifUrl: response.data.image_url
+					gifUrl: response.data.images.downsized_large.url
 				});
 			})
 		})
@@ -77,7 +78,7 @@ class App extends Component {
 		};
 
 		return (
-			<div style={{width: '400px'}}>
+			<div style={{minWidth: '250px'}}>
 				<h1>GIFPRS -- GIFs on demand!</h1>
 				<input type="text" onChange={this.handleInputChange} defaultValue={this.state.keyword}></input>
 				<button onClick={this.handleGifRequest}>Get the gif!</button>
