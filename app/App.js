@@ -1,7 +1,14 @@
 import React, { Component, Fragment } from 'react';
 
-class App extends Component {
+const prTitleRegExp = /PR[\s-]\d*[:]*[\s]*/gmi;
 
+function getPRTitle() {
+	return document.querySelector('#pull_request_title').value;
+}
+
+const parsePRTitle = prTitle => prTitle.replace(prTitleRegExp, '');
+
+class App extends Component {
 	constructor() {
 		super();
 		this.state = {
@@ -18,9 +25,21 @@ class App extends Component {
 		this.handleMDCopy = this.handleMDCopy.bind(this);
 	}
 
+	componentDidMount() {
+		chrome.tabs.executeScript({
+				code: '(' + getPRTitle + ')();' //argument here is a string but function.toString() returns function's code
+		}, (results) => {
+				//Here we have just the innerHTML and not DOM structure
+				this.setState({
+					keyword: parsePRTitle(results[0])
+				}, this.handleGifRequest);
+		});
+	}
+
 	handleGifRequest() {
 		const keyParam = 'api_key=VwV9rz5sgKf0uBViFwBlU9b8H3lmossH';
 		const params = this.state.keyword ? `tag=${this.state.keyword}&${keyParam}` : keyParam;
+
 		this.setState({
 			isLoaded: false
 		}, () => {
@@ -60,7 +79,7 @@ class App extends Component {
 		return (
 			<div style={{width: '400px'}}>
 				<h1>GIFPRS -- GIFs on demand!</h1>
-				<input type="text" onChange={this.handleInputChange}></input>
+				<input type="text" onChange={this.handleInputChange} defaultValue={this.state.keyword}></input>
 				<button onClick={this.handleGifRequest}>Get the gif!</button>
 				{this.state.gifUrl && (
 					<Fragment>
