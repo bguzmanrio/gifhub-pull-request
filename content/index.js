@@ -1,21 +1,46 @@
-import { WRITE_DOM } from '../actions';
+import { WRITE_DOM, ASK_FOR_BODY } from '../actions';
+
+const getBody = () => {
+  const prBody = document.querySelector('#pull_request_body');
+  
+  if (!prBody) {
+    throw new Error('No body found!');
+  }
+
+  return prBody;
+}
 
 const insertMDCode = mdCode => {
-  const prBody = document.querySelector('#pull_request_body');
+  const prBody = getBody();
+  const currentValue = prBody.value;
 
-  if (prBody) {
-    const currentValue = prBody.value;
-    prBody.value = `${currentValue}\n${mdCode}`;
-  } else {
-    throw new Error('No body found!');
+  prBody.value = `${currentValue}\n${mdCode}`;
+}
+
+const ACTION_RESOLVERS = {
+  [WRITE_DOM]: (payload, next) => {
+    try {
+      insertMDCode(payload);
+      next({ ok: true });
+    } catch (error) {
+      next({ ok: false, error });
+    }
+  },
+  [ASK_FOR_BODY]: (_, next) => {
+    try {
+      getBody();
+      next({ ok: true });
+    } catch (error) {
+      next({ ok: false, error });
+    }
+  },
+  default: (_, next, action) => {
+    next({ ok: false, error: `No resolver for action ${action}`});
   }
 }
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.action === WRITE_DOM) {
-    insertMDCode(request.payload);
-    sendResponse({ ok: true });
-  } else {
-    sendResponse({ ok: false });
-  }
+chrome.runtime.onMessage.addListener(function(request, _, sendResponse) {
+  const resolver = ACTION_RESOLVERS[request.action] || ACTION_RESOLVERS.default;
+
+  resolver(request.payload, sendResponse, request.action);
 });

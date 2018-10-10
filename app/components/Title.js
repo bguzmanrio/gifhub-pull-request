@@ -2,6 +2,7 @@ import styled, { css } from 'react-emotion';
 
 const baseTitle = css`
   color: white;
+  font-weight: 400;
   margin: 0px 0px 8px 0px;
   text-align: center;
 `;

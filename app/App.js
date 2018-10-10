@@ -3,9 +3,10 @@ import React, { Component, Fragment } from 'react';
 import Button from './components/Button';
 import Input from './components/Input';
 import Block from './components/Block';
+import Collaborate from './components/Collaborate';
 import { MainTitle, SecondaryTitle } from './components/Title';
 
-import { getTitleFromPr, appendMDToPr } from './utils/chromeConnector';
+import { getTitleFromPr, appendMDToPr, hasPRBody } from './utils/chromeConnector';
 
 import './styles';
 
@@ -19,7 +20,8 @@ class App extends Component {
       mdCode: null,
       keyword: null,
       copied: false,
-      injected: false,
+      ableToInsert: false,
+      inserted: false,
       isLoaded: false
     };
 
@@ -32,6 +34,9 @@ class App extends Component {
   }
 
   componentDidMount() {
+    hasPRBody().then(() => {
+      this.setState({ ableToInsert: true });
+    })
     getTitleFromPr().then(keyword => {
       this.setState({ keyword }, this.handleGifRequest);
     });
@@ -44,14 +49,16 @@ class App extends Component {
     this.setState({
       isLoaded: false,
       copied: false,
-      injected: false
+      inserted: false
     }, () => {
-      fetch(`https://api.giphy.com/v1/gifs/random?${params}`).then(res => res.json()).then(response => {
-        this.setState({
-          gifUrl: response.data.images.downsized_large.url,
-          mdCode: getMDCode(response.data.images.downsized_large.url)
-        });
-      })
+      fetch(`https://api.giphy.com/v1/gifs/random?${params}`)
+        .then(res => res.json())
+        .then(response => {
+          this.setState({
+            gifUrl: response.data.images.downsized_large.url,
+            mdCode: getMDCode(response.data.images.downsized_large.url)
+          });
+        })
     })
   }
 
@@ -79,7 +86,7 @@ class App extends Component {
     appendMDToPr(this.state.mdCode)
       .then(() => {
         this.setState({
-          injected: true
+          inserted: true
         })
       })
       .catch(err => {
@@ -113,9 +120,12 @@ class App extends Component {
                 <Button vertical onClick={this.handleMDCopy}>
                   {this.state.copied ? 'Copied!' : 'Copy'}
                 </Button>
-                <Button vertical onClick={this.handleMDAppend}>
-                  {this.state.injected ? 'Inserted!' : 'Insert MD code!'}
-                </Button>
+                {this.state.ableToInsert && (
+                  <Button vertical onClick={this.handleMDAppend}>
+                    {this.state.inserted ? 'Inserted!' : 'Insert MD code!'}
+                  </Button>
+                )}
+                <Collaborate />
               </Block>
             </div>
           </Fragment>
