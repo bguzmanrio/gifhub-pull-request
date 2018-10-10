@@ -5,7 +5,10 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 export default {
-  entry: path.join(__dirname, 'app/index.js'),
+  entry: {
+    main: path.join(__dirname, 'app/index.js'),
+    content: path.join(__dirname, 'content/index.js')
+  },
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].bundle.js'

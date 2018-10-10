@@ -5,7 +5,7 @@ import Input from './components/Input';
 import Block from './components/Block';
 import { MainTitle, SecondaryTitle } from './components/Title';
 
-import { getTitleFromPr, appendMDToPr } from './utils/domConnector';
+import { getTitleFromPr, appendMDToPr } from './utils/chromeConnector';
 
 import './styles';
 
@@ -19,6 +19,7 @@ class App extends Component {
       mdCode: null,
       keyword: null,
       copied: false,
+      injected: false,
       isLoaded: false
     };
 
@@ -41,7 +42,9 @@ class App extends Component {
     const params = this.state.keyword ? `tag=${this.state.keyword}&${keyParam}` : keyParam;
 
     this.setState({
-      isLoaded: false
+      isLoaded: false,
+      copied: false,
+      injected: false
     }, () => {
       fetch(`https://api.giphy.com/v1/gifs/random?${params}`).then(res => res.json()).then(response => {
         this.setState({
@@ -73,7 +76,15 @@ class App extends Component {
   }
 
   handleMDAppend() {
-    appendMDToPr(this.state.mdCode).then(() => { console.log('done'); }).catch(e => { console.log(e) })
+    appendMDToPr(this.state.mdCode)
+      .then(() => {
+        this.setState({
+          injected: true
+        })
+      })
+      .catch(err => {
+        console.log('err', err);
+      });
   }
 
   render() {
@@ -98,9 +109,13 @@ class App extends Component {
               <img src={this.state.gifUrl} onLoad={this.handleImageLoad}/>
               <SecondaryTitle>MarkDown code</SecondaryTitle>
               <Block vertical>
-                <Input ref={this.mdCodeRef} type="text" defaultValue={this.state.mdCode} readOnly vertical />
-                <Button vertical onClick={this.handleMDCopy}>{this.state.copied ? 'Copied!' : 'Copy'}</Button>
-                <Button vertical onClick={this.handleMDAppend}>Insert MD code</Button>
+                <Input innerRef={this.mdCodeRef} type="text" defaultValue={this.state.mdCode} readOnly vertical />
+                <Button vertical onClick={this.handleMDCopy}>
+                  {this.state.copied ? 'Copied!' : 'Copy'}
+                </Button>
+                <Button vertical onClick={this.handleMDAppend}>
+                  {this.state.injected ? 'Inserted!' : 'Insert MD code!'}
+                </Button>
               </Block>
             </div>
           </Fragment>

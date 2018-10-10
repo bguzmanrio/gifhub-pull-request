@@ -4,10 +4,19 @@
   "description": "Build an Extension!",
   "manifest_version": 2,
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "tabs",
+    "https://github.com/*"
   ],
   "browser_action": {
     "default_popup": "index.html",
     "default_title": "Open the popup"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*"],
+      "js": ["content.bundle.js"],
+      "run_at": "document_end"
+    }
+  ]
 }

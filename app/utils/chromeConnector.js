@@ -1,3 +1,5 @@
+import { WRITE_DOM } from '../../actions';
+
 const prTitleRegExp = /PR[\s-]\d*[:]*[\s]*/gmi;
 
 const getPRTitle = () => {
@@ -27,14 +29,21 @@ export const getTitleFromPr = () =>
     });
   });
 
-export const appendMDToPr = mdCode => 
-  new Promise(resolve => {
-    chrome.tabs.executeScript({
-      code: `(${insertMDCode})(${mdCode})`
-    }, () => {
-      resolve(true);
-    });
-  })
+export const appendMDToPr = mdCode => new Promise((resolve, reject) => {
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    chrome.tabs.sendMessage(
+      tabs[0].id,
+      { action: WRITE_DOM, payload: mdCode },
+      function(response) {
+        if (response.ok) {
+          resolve();
+        } else {
+          reject();
+        }
+      }
+    );
+  });
+})
 
 export default {
   getTitleFromPr,
