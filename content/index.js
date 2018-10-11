@@ -1,7 +1,7 @@
 import { WRITE_DOM, ASK_FOR_BODY } from '../actions';
 
 const getBody = () => {
-  const prBody = document.querySelector('#pull_request_body');
+  const prBody = document.querySelector('#pull_request_body') || document.querySelector('[name="pull_request[body]"]');
   
   if (!prBody) {
     throw new Error('No body found!');

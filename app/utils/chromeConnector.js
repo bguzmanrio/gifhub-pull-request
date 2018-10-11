@@ -3,7 +3,7 @@ import { WRITE_DOM, ASK_FOR_BODY } from '../../actions';
 const prTitleRegExp = /PR[\s-]\d*[:]*[\s]*/gmi;
 
 const getPRTitle = () => {
-  const title = document.querySelector('#pull_request_title') || {};
+  const title = document.querySelector('#pull_request_title') || document.querySelector('[name="issue[title]"]') || {};
   return title.value || '';
 };
 

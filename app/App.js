@@ -116,7 +116,7 @@ class App extends Component {
               <img src={this.state.gifUrl} onLoad={this.handleImageLoad}/>
               <SecondaryTitle>MarkDown code</SecondaryTitle>
               <Block vertical>
-                <Input innerRef={this.mdCodeRef} type="text" defaultValue={this.state.mdCode} readOnly vertical />
+                <Input innerRef={this.mdCodeRef} type="text" value={this.state.mdCode} readOnly vertical />
                 <Button vertical onClick={this.handleMDCopy}>
                   {this.state.copied ? 'Copied!' : 'Copy'}
                 </Button>
