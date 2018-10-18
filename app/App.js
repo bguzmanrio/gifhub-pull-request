@@ -4,6 +4,9 @@ import Button from './components/Button';
 import Input from './components/Input';
 import Block from './components/Block';
 import Collaborate from './components/Collaborate';
+import Sponsor from './components/Sponsor';
+import Footer from './components/Footer';
+import Loading from './components/Loading';
 import { MainTitle, SecondaryTitle } from './components/Title';
 
 import { getTitleFromPr, appendMDToPr, hasPRBody } from './utils/chromeConnector';
@@ -36,9 +39,13 @@ class App extends Component {
   componentDidMount() {
     hasPRBody().then(() => {
       this.setState({ ableToInsert: true });
-    })
+    }).catch(() => {
+      console.log('No Pull-Request body found');
+    });
     getTitleFromPr().then(keyword => {
       this.setState({ keyword }, this.handleGifRequest);
+    }).catch(() => {
+      console.log('No Pull-Request title found');
     });
   }
 
@@ -109,9 +116,7 @@ class App extends Component {
         </Block>
         {this.state.gifUrl && (
           <Fragment>
-            {!this.state.isLoaded && (
-              <div>Loading GIF...</div>
-            )}
+            <Loading isLoaded={this.state.isLoaded} />
             <div style={imgStyles}>
               <img src={this.state.gifUrl} onLoad={this.handleImageLoad}/>
               <SecondaryTitle>MarkDown code</SecondaryTitle>
@@ -125,12 +130,14 @@ class App extends Component {
                     {this.state.inserted ? 'Inserted!' : 'Insert MD code!'}
                   </Button>
                 )}
-                <Collaborate />
               </Block>
             </div>
           </Fragment>
         )}
-        
+        <Footer>
+          <Sponsor />
+          <Collaborate />
+        </Footer>
       </div>
     )
   }
