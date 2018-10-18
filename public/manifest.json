@@ -18,5 +18,6 @@
       "js": ["content.bundle.js"],
       "run_at": "document_end"
     }
-  ]
+  ],
+  "web_accessible_resources": ["img/giphy_logo.gif"]
 }
