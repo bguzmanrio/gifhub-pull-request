@@ -15,7 +15,8 @@ const requestToChrome = (payload) => new Promise((resolve, reject) => {
       tabs[0].id,
       payload,
       response => {
-        if (response.ok) {
+        //There might be no response if we are not in github.com
+        if (response && response.ok) {
           resolve();
         } else {
           reject(response.error);
@@ -38,8 +39,11 @@ export const appendMDToPr = mdCode => requestToChrome({ action: WRITE_DOM, paylo
 
 export const hasPRBody = () => requestToChrome({ action: ASK_FOR_BODY });
 
+export const getURL = resourceName => chrome.extension.getURL(resourceName);
+
 export default {
   getTitleFromPr,
   appendMDToPr,
-  hasPRBody
+  hasPRBody,
+  getURL
 };
