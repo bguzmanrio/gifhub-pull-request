@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 
 import Button from './components/Button';
+import CopyButton from './components/CopyButton';
 import Input from './components/Input';
 import Block from './components/Block';
 import Collaborate from './components/Collaborate';
@@ -22,17 +23,14 @@ class App extends Component {
       gifUrl: null,
       mdCode: null,
       keyword: null,
-      copied: false,
       ableToInsert: false,
       inserted: false,
       isLoaded: false
     };
 
-    this.mdCodeRef = React.createRef();
     this.handleImageLoad = this.handleImageLoad.bind(this);
     this.handleGifRequest = this.handleGifRequest.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleMDCopy = this.handleMDCopy.bind(this);
     this.handleMDAppend = this.handleMDAppend.bind(this);
   }
 
@@ -42,6 +40,7 @@ class App extends Component {
     }).catch(() => {
       console.log('No Pull-Request body found');
     });
+
     getTitleFromPr().then(keyword => {
       this.setState({ keyword }, this.handleGifRequest);
     }).catch(() => {
@@ -55,7 +54,6 @@ class App extends Component {
 
     this.setState({
       isLoaded: false,
-      copied: false,
       inserted: false
     }, () => {
       fetch(`https://api.giphy.com/v1/gifs/random?${params}`)
@@ -78,14 +76,6 @@ class App extends Component {
   handleInputChange(e) {
     this.setState({
       keyword: e.target.value
-    });
-  }
-
-  handleMDCopy() {
-    this.mdCodeRef.current.select();
-    document.execCommand('copy');
-    this.setState({
-      copied: true
     });
   }
 
@@ -125,10 +115,8 @@ class App extends Component {
               <img src={this.state.gifUrl} onLoad={this.handleImageLoad}/>
               <SecondaryTitle>MarkDown code</SecondaryTitle>
               <Block vertical>
-                <Input innerRef={this.mdCodeRef} type="text" value={this.state.mdCode} readOnly vertical />
-                <Button vertical onClick={this.handleMDCopy}>
-                  {this.state.copied ? 'Copied!' : 'Copy'}
-                </Button>
+                <CopyButton url={this.state.mdCode} copiedText="Copied!" copyText="Copy MarkDown code" />
+                <CopyButton url={this.state.gifUrl} copiedText="Copied!" copyText="Copy GIF URL" />
                 {this.state.ableToInsert && (
                   <Button vertical onClick={this.handleMDAppend}>
                     {this.state.inserted ? 'Inserted!' : 'Insert MD code!'}
