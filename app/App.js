@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 
 import Button from './components/Button';
+import CopyButton from './components/CopyButton';
 import Input from './components/Input';
 import Block from './components/Block';
 import Collaborate from './components/Collaborate';
@@ -23,6 +24,7 @@ class App extends Component {
       mdCode: null,
       keyword: null,
       copied: false,
+      copiedMD: false,
       ableToInsert: false,
       inserted: false,
       isLoaded: false
@@ -42,6 +44,7 @@ class App extends Component {
     }).catch(() => {
       console.log('No Pull-Request body found');
     });
+
     getTitleFromPr().then(keyword => {
       this.setState({ keyword }, this.handleGifRequest);
     }).catch(() => {
@@ -129,6 +132,7 @@ class App extends Component {
                 <Button vertical onClick={this.handleMDCopy}>
                   {this.state.copied ? 'Copied!' : 'Copy'}
                 </Button>
+                <CopyButton />
                 {this.state.ableToInsert && (
                   <Button vertical onClick={this.handleMDAppend}>
                     {this.state.inserted ? 'Inserted!' : 'Insert MD code!'}
