@@ -1,6 +1,14 @@
 import React from 'react';
 import styled from 'react-emotion';
 
+import { openURL } from '../utils/chromeConnector';
+
+const GITHUB_URL = 'https://github.com/bguzmanrio/pr-gif-extension';
+
+const handleOpen = () => {
+  openURL(GITHUB_URL);
+}
+
 const CollaborateWrapper = styled('div')`
   text-align: right;
 `;
@@ -14,7 +22,7 @@ const CollaborateLink = styled('a')`
 
 const Collaborate = () => (
   <CollaborateWrapper>
-    <CollaborateLink href="https://github.com/bguzmanrio/pr-gif-extension">Collaborate here</CollaborateLink>
+    <CollaborateLink onClick={handleOpen} href="https://github.com/bguzmanrio/pr-gif-extension">Collaborate here</CollaborateLink>
   </CollaborateWrapper>
 );
 

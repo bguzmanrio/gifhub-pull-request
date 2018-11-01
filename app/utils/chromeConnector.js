@@ -41,9 +41,12 @@ export const hasPRBody = () => requestToChrome({ action: ASK_FOR_BODY });
 
 export const getURL = resourceName => chrome.extension.getURL(resourceName);
 
+export const openURL = url => chrome.tabs.create({ url });
+
 export default {
   getTitleFromPr,
   appendMDToPr,
   hasPRBody,
-  getURL
+  getURL,
+  openURL
 };
