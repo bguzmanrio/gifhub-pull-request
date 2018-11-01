@@ -3,7 +3,7 @@ import React from 'react';
 import { getURL } from '../utils/chromeConnector';
 
 const Sponsor = () => (
-  <img src={getURL('img/giphy_logo.gif')} alt="Powered by Giphy" style={{ maxWidth: '150px'}}/>
+  <img src={getURL('img/giphy_logo.gif')} alt="Powered by Giphy" style={{ maxWidth: '150px'}} />
 );
 
 export default Sponsor;

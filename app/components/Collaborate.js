@@ -3,6 +3,8 @@ import styled from 'react-emotion';
 
 import { openURL } from '../utils/chromeConnector';
 
+import Button from './Button';
+
 const GITHUB_URL = 'https://github.com/bguzmanrio/pr-gif-extension';
 
 const handleOpen = () => {
@@ -15,14 +17,14 @@ const CollaborateWrapper = styled('div')`
 
 const CollaborateLink = styled('a')`
   font-size: 12px;
-  font-weight: 300;
+  font-weight: 400;
   color: white;
   text-decoration: none;
 `;
 
 const Collaborate = () => (
   <CollaborateWrapper>
-    <CollaborateLink onClick={handleOpen} href="https://github.com/bguzmanrio/pr-gif-extension">Collaborate here</CollaborateLink>
+    <Button onClick={handleOpen}>Collaborate here</Button>
   </CollaborateWrapper>
 );
 

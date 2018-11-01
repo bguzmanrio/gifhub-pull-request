@@ -1,7 +1,7 @@
 {
-  "name": "Getting Started Example",
-  "version": "1.0",
-  "description": "Build an Extension!",
+  "name": "Gif for github pull requests",
+  "version": "1.1.0",
+  "description": "Gifs for github pull requests",
   "manifest_version": 2,
   "permissions": [
     "activeTab",
@@ -19,5 +19,9 @@
       "run_at": "document_end"
     }
   ],
-  "web_accessible_resources": ["img/giphy_logo.gif"]
+  "icons": {
+    "16": "icons/icon_16.png",
+    "48": "icons/icon_48.png",
+    "128": "icons/icon_128.png" },
+  "web_accessible_resources": ["img/giphy_logo.gif", "img/loader.gif"]
 }

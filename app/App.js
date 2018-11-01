@@ -102,8 +102,9 @@ class App extends Component {
     };
 
     return (
-      <div style={{minWidth: '250px'}}>
-        <MainTitle>Animate your PRs</MainTitle>
+      <div style={{minWidth: '300px'}}>
+        <MainTitle>GIFHub Pull-Requests</MainTitle>
+        <SecondaryTitle>Find the perfect GIF for your new cool feature!</SecondaryTitle>
         <Block>
           <Input type="text" onChange={this.handleInputChange} defaultValue={this.state.keyword} />
           <Button onClick={this.handleGifRequest}>{this.getSearchMessage()}</Button>
@@ -113,7 +114,6 @@ class App extends Component {
             <Loading isLoaded={this.state.isLoaded} />
             <div style={imgStyles}>
               <img src={this.state.gifUrl} onLoad={this.handleImageLoad}/>
-              <SecondaryTitle>MarkDown code</SecondaryTitle>
               <Block vertical>
                 <CopyButton url={this.state.mdCode} copiedText="Copied!" copyText="Copy MarkDown code" />
                 <CopyButton url={this.state.gifUrl} copiedText="Copied!" copyText="Copy GIF URL" />
