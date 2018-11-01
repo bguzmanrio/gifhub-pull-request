@@ -9,6 +9,7 @@ const Button = styled('button')`
   flex: 0;
   font-weight: 300;
   margin-bottom: ${props => props.vertical ? '8px' : 0};
+  min-width: 110px;
   padding: 8px 16px;
 
   &:active {

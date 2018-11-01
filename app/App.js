@@ -101,6 +101,10 @@ class App extends Component {
       });
   }
 
+  getSearchMessage() {
+    return this.state.gifUrl ? 'Search again' : 'Search';
+  }
+
   render() {
     const imgStyles = {
       display: this.state.isLoaded ? 'block' : 'none',
@@ -112,7 +116,7 @@ class App extends Component {
         <MainTitle>Animate your PRs</MainTitle>
         <Block>
           <Input type="text" onChange={this.handleInputChange} defaultValue={this.state.keyword} />
-          <Button onClick={this.handleGifRequest}>Search!</Button>
+          <Button onClick={this.handleGifRequest}>{this.getSearchMessage()}</Button>
         </Block>
         {this.state.gifUrl && (
           <Fragment>
