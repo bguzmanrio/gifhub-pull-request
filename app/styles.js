@@ -6,7 +6,7 @@ injectGlobal`
     padding: 0;
   }
   body {
-    background: #2F2FA2;
+    background: #0f0f0f;
     padding: 8px 4px;
   }
 

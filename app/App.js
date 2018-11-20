@@ -23,18 +23,14 @@ class App extends Component {
       gifUrl: null,
       mdCode: null,
       keyword: null,
-      copied: false,
-      copiedMD: false,
       ableToInsert: false,
       inserted: false,
       isLoaded: false
     };
 
-    this.mdCodeRef = React.createRef();
     this.handleImageLoad = this.handleImageLoad.bind(this);
     this.handleGifRequest = this.handleGifRequest.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleMDCopy = this.handleMDCopy.bind(this);
     this.handleMDAppend = this.handleMDAppend.bind(this);
   }
 
@@ -58,7 +54,6 @@ class App extends Component {
 
     this.setState({
       isLoaded: false,
-      copied: false,
       inserted: false
     }, () => {
       fetch(`https://api.giphy.com/v1/gifs/random?${params}`)
@@ -81,14 +76,6 @@ class App extends Component {
   handleInputChange(e) {
     this.setState({
       keyword: e.target.value
-    });
-  }
-
-  handleMDCopy() {
-    this.mdCodeRef.current.select();
-    document.execCommand('copy');
-    this.setState({
-      copied: true
     });
   }
 
@@ -115,8 +102,9 @@ class App extends Component {
     };
 
     return (
-      <div style={{minWidth: '250px'}}>
-        <MainTitle>Animate your PRs</MainTitle>
+      <div style={{minWidth: '300px'}}>
+        <MainTitle>GIFHub Pull-Requests</MainTitle>
+        <SecondaryTitle>Find the perfect GIF for your new cool feature!</SecondaryTitle>
         <Block>
           <Input type="text" onChange={this.handleInputChange} defaultValue={this.state.keyword} />
           <Button onClick={this.handleGifRequest}>{this.getSearchMessage()}</Button>
@@ -126,13 +114,9 @@ class App extends Component {
             <Loading isLoaded={this.state.isLoaded} />
             <div style={imgStyles}>
               <img src={this.state.gifUrl} onLoad={this.handleImageLoad}/>
-              <SecondaryTitle>MarkDown code</SecondaryTitle>
               <Block vertical>
-                <Input innerRef={this.mdCodeRef} type="text" value={this.state.mdCode} readOnly vertical />
-                <Button vertical onClick={this.handleMDCopy}>
-                  {this.state.copied ? 'Copied!' : 'Copy'}
-                </Button>
-                <CopyButton />
+                <CopyButton url={this.state.mdCode} copiedText="Copied!" copyText="Copy MarkDown code" />
+                <CopyButton url={this.state.gifUrl} copiedText="Copied!" copyText="Copy GIF URL" />
                 {this.state.ableToInsert && (
                   <Button vertical onClick={this.handleMDAppend}>
                     {this.state.inserted ? 'Inserted!' : 'Insert MD code!'}
