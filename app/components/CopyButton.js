@@ -1,52 +1,40 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 
 import Button from './Button';
 
-class CopyButton extends React.Component {
-  constructor(){
-    super();
+const copyUrl = (url, parentNode) => {
+  const hiddenInput = document.createElement('input');
+  hiddenInput.type = 'text';
+  hiddenInput.style.height = '0px';
+  hiddenInput.style.opacity = '0';
+  hiddenInput.value = url;
+  parentNode.appendChild(hiddenInput);
+  hiddenInput.select();
+  document.execCommand('copy');
+  parentNode.innerHTML = '';
+};
 
-    this.state = {
-      copied: false
-    };
+const CopyButtonHook = props => {
+  const inputWrapper = React.useRef(null);
+  const [copied, setCopy] = React.useState(false);
 
-    this.inputWrapperRef = React.createRef();
+  useEffect(() => {
+    setCopy(false);
+  }, [props.url]);
 
-    this.handleCopy = this.handleCopy.bind(this);
-  }
+  const handleCopy = () => {
+    copyUrl(props.url, inputWrapper.current);
+    setCopy(true);
+  };
 
-  componentDidUpdate(prevProps) {
-    if(prevProps.url !== this.props.url) {
-      this.setState({ copied: false });
-    }
-  }
+  return (
+    <Fragment>
+      <Button vertical onClick={handleCopy}>
+        {copied ? props.copiedText : props.copyText}
+      </Button>
+      <span ref={inputWrapper} />
+    </Fragment>
+  )
+};
 
-  handleCopy() {
-    const hiddenInput = document.createElement('input');
-    hiddenInput.type = 'text';
-    hiddenInput.style.height = '0px';
-    hiddenInput.style.opacity = '0';
-    hiddenInput.value = this.props.url;
-    this.inputWrapperRef.current.appendChild(hiddenInput);
-    hiddenInput.select();
-    document.execCommand('copy');
-    this.setState({
-      copied: true
-    });
-
-    this.inputWrapperRef.current.innerHTML = '';
-  }
-
-  render() {
-    return (
-      <Fragment>
-        <Button vertical onClick={this.handleCopy}>
-          {this.state.copied ? this.props.copiedText : this.props.copyText}
-        </Button>
-        <span ref={this.inputWrapperRef} />
-      </Fragment>
-    );
-  }
-}
-
-export default CopyButton;
+export default CopyButtonHook;
