@@ -8,6 +8,7 @@ import Collaborate from './components/Collaborate';
 import Sponsor from './components/Sponsor';
 import Footer from './components/Footer';
 import Loading from './components/Loading';
+import Form from './components/Form';
 import { MainTitle, SecondaryTitle } from './components/Title';
 
 import { getTitleFromPr, appendMDToPr, hasPRBody } from './utils/chromeConnector';
@@ -95,13 +96,15 @@ class App extends Component {
     };
 
     return (
-      <div style={{minWidth: '300px'}}>
+      <div style={{minWidth: '400px'}}>
         <MainTitle>GIFHub Pull-Requests</MainTitle>
         <SecondaryTitle>Find the perfect GIF for your new cool feature!</SecondaryTitle>
-        <Block>
-          <Input type="text" onChange={this.handleInputChange} defaultValue={this.state.keyword} />
-          <Button onClick={this.handleGifRequest}>{this.getSearchMessage()}</Button>
-        </Block>
+        <Form>
+          <Block>
+            <Input type="text" onChange={this.handleInputChange} defaultValue={this.state.keyword} autoFocus />
+            <Button type="submit" onClick={this.handleGifRequest}>{this.getSearchMessage()}</Button>
+          </Block>
+        </Form>
         {this.state.gifUrl && (
           <Fragment>
             <Loading isLoaded={this.state.isLoaded} />
