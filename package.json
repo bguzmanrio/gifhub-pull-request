@@ -26,11 +26,12 @@
   },
   "homepage": "https://github.com/bguzmanrio/pr-gif-extension#readme",
   "dependencies": {
+    "@emotion/core": "^10.0.7",
+    "@emotion/styled": "^10.0.7",
     "copy-webpack-plugin": "^4.5.2",
-    "emotion": "^9.2.12",
-    "react": "^16.7.0-alpha.0",
-    "react-dom": "^16.7.0-alpha.0",
-    "react-emotion": "^9.2.12"
+    "emotion": "^10.0.7",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",

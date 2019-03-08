@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 
 import Button from './Button';
 
@@ -18,7 +18,7 @@ const CopyButtonHook = props => {
   const inputWrapper = React.useRef(null);
   const [copied, setCopy] = React.useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCopy(false);
   }, [props.url]);
 
