@@ -19,7 +19,7 @@ const requestToChrome = (payload) => new Promise((resolve, reject) => {
         if (response && response.ok) {
           resolve();
         } else {
-          reject(response.error);
+          reject(response);
         }
       }
     );
