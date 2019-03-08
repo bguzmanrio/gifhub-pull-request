@@ -11,6 +11,7 @@ import Loading from './components/Loading';
 import { MainTitle, SecondaryTitle } from './components/Title';
 
 import { getTitleFromPr, appendMDToPr, hasPRBody } from './utils/chromeConnector';
+import { requestGIF } from './utils/requestGif';
 
 import './styles';
 
@@ -49,21 +50,13 @@ class App extends Component {
   }
 
   handleGifRequest() {
-    const keyParam = 'api_key=VwV9rz5sgKf0uBViFwBlU9b8H3lmossH';
-    const params = this.state.keyword ? `tag=${this.state.keyword}&${keyParam}` : keyParam;
-
     this.setState({
       isLoaded: false,
       inserted: false
     }, () => {
-      fetch(`https://api.giphy.com/v1/gifs/random?${params}`)
-        .then(res => res.json())
-        .then(response => {
-          this.setState({
-            gifUrl: response.data.images.downsized_large.url,
-            mdCode: getMDCode(response.data.images.downsized_large.url)
-          });
-        })
+      requestGIF(this.state.keyword).then(newGIF => {
+        this.setState(newGIF);
+      });
     })
   }
 
