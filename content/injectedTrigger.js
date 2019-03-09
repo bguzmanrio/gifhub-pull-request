@@ -8,6 +8,10 @@ import { WRITE_DOM } from '../actions';
 import { ACTION_RESOLVERS } from './actionResolvers';
 import { getButtonFooter } from './getDomComponents';
 
+const MAX_WIDTH_ALLOWED = 350;
+
+const getMaxWidth = maxWidth => Math.min(MAX_WIDTH_ALLOWED, maxWidth);
+
 const getInjectedWrapperStyle = maxWidth => ({
   alignItems: 'center',
   backgroundColor: '#fff',
@@ -16,7 +20,7 @@ const getInjectedWrapperStyle = maxWidth => ({
   display: 'flex',
   flexDirection: 'column',
   padding: '5px',
-  maxWidth
+  maxWidth: getMaxWidth(maxWidth)
 });
 
 const imgStyle = {
@@ -24,16 +28,18 @@ const imgStyle = {
   maxWidth: '100%'
 };
 
-
 const InjectedExtension = ({ gif, handleRefreshGif, handleCancel, maxWidth }) => (
   <div style={getInjectedWrapperStyle(maxWidth)}>
     <img style={imgStyle} src={gif.gifUrl}></img>
     <div className="clearfix">
       <button
         className="btn btn-primary"
-        onCLick={e => e.preventDefault() && ACTION_RESOLVERS[WRITE_DOM](gif.mdCode)}
+        onClick={e => {
+          e.preventDefault();
+          ACTION_RESOLVERS[WRITE_DOM](gif.mdCode, () => {})
+        }}
       >
-        Let's do it!
+        Add GIF
       </button>
       <button className="btn btn-danger" onClick={handleCancel}>
         Cancel
@@ -59,15 +65,14 @@ export const insertTrigger = () => {
   };
   appWrapper.style.position = 'absolute';
   appWrapper.style.top = '100%';
+  appWrapper.style.right = 0;
   appWrapper.style.zIndex = 9999;
   triggerButton.addEventListener('click', e => {
     e.preventDefault();
     requestGIF().then(newGif => {
-      const maxWidth = buttonFooter.clientWidth;
-      appWrapper.style.maxWidth = maxWidth;
       render(
         <InjectedExtension
-          maxWidth={maxWidth}
+          maxWidth={buttonFooter.clientWidth}
           gif={newGif}
           handleRefreshGif={triggerButtonDispatcher}
           handleCancel={emptyInjectedApp}
@@ -77,6 +82,7 @@ export const insertTrigger = () => {
     })
   })
   triggerButton.className = 'btn';
+  triggerButton.style.marginRight = '5px';
   triggerButton.innerHTML = 'Have fun!'
   buttonFooter.appendChild(triggerButton);
   buttonFooter.appendChild(appWrapper);

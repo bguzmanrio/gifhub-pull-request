@@ -19,7 +19,7 @@ export const getBody = () => {
 };
 
 export const getButtonFooter = () => {
-  const prButtonFooter = document.querySelector('.comment-form-actions');
+  const prButtonFooter = document.querySelector('.comment-form-actions') || document.querySelector('.form-actions');
 
   if (!prButtonFooter) {
     throw new Error('No button footer found!');
