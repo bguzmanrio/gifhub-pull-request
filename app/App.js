@@ -16,8 +16,6 @@ import { requestGIF } from './utils/requestGif';
 
 import './styles';
 
-const getMDCode = url => `![](${url})`;
-
 class App extends Component {
   constructor() {
     super();
@@ -43,8 +41,8 @@ class App extends Component {
       console.log('No Pull-Request body found');
     });
 
-    getTitleFromPr().then(keyword => {
-      this.setState({ keyword }, this.handleGifRequest);
+    getTitleFromPr().then(({ payload }) => {
+      this.setState({ keyword: payload.title }, this.handleGifRequest);
     }).catch(() => {
       console.log('No Pull-Request title found');
     });
