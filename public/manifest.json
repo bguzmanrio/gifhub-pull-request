@@ -1,7 +1,7 @@
 {
-  "name": "Gif for github pull requests",
-  "version": "1.1.0",
-  "description": "Gifs for github pull requests",
+  "name": "Gifhub Pull Request",
+  "version": "2.0.0",
+  "description": "Find the best GIFs for your awesome pull requests",
   "manifest_version": 2,
   "permissions": [
     "activeTab",
