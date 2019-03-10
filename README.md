@@ -1,6 +1,6 @@
 # Gif for github pull requests
 
-![](https://lh3.googleusercontent.com/TOfFHOLfe4w8JhDXgG271m9RIuPI5aoiz4-kI_pzntQ0uQPim6YvNTJNt3O0W7g9DvKoCB8fGvc=w640-h400-e365)
+![](https://lh3.googleusercontent.com/CbkU5QBCEBuArD0dFeHTEmFREye_S1bWyBfwgGWD_pNrbw8fXl00095eRjC4_ekMJdMAljLLQw=w640-h400-e365)
 
 ## Description
 This is a Google Chrome Extension that will allow you to find a GIF that matches the PR you are opening or editing.
