@@ -48,7 +48,8 @@ class App extends Component {
     });
   }
 
-  handleGifRequest() {
+  handleGifRequest(e) {
+    e && e.preventDefault();
     this.setState({
       isLoaded: false,
       inserted: false
