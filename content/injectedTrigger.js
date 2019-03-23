@@ -83,7 +83,7 @@ export const insertTrigger = () => {
   })
   triggerButton.className = 'btn';
   triggerButton.style.marginRight = '5px';
-  triggerButton.innerHTML = 'Have fun!'
+  triggerButton.innerHTML = 'Find GIF'
   buttonFooter.appendChild(triggerButton);
   buttonFooter.appendChild(appWrapper);
 };
