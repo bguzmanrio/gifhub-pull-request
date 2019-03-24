@@ -1,4 +1,4 @@
-const KEY = 'api_key=VwV9rz5sgKf0uBViFwBlU9b8H3lmossH';
+const URL = 'https://ibc8z5i391.execute-api.us-east-2.amazonaws.com/prod/gifhub';
 const MAX_SIZE = 5 * 10e5;
 
 const GIF_PRIORITIES = ['downsized_large', 'downsized_medium', 'downsized', 'downsized_small'];
@@ -6,9 +6,9 @@ const GIF_PRIORITIES = ['downsized_large', 'downsized_medium', 'downsized', 'dow
 const getMDCode = url => `![](${url})`;
 
 export const requestGIF = searchTag => {
-  const params = searchTag ? `tag=${searchTag}&${KEY}` : KEY;
+  const params = searchTag ? `?tag=${searchTag}` : '';
 
-  return fetch(`https://api.giphy.com/v1/gifs/random?${params}`)
+  return fetch(`${URL}${params}`)
     .then(res => res.json())
     .then(response => {
       const selectedGIFName = GIF_PRIORITIES.find(name => {
