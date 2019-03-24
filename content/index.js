@@ -1,5 +1,5 @@
 import { ACTION_RESOLVERS } from './actionResolvers';
-import { insertTrigger } from './injectedTrigger';
+import { insertTriggers } from './injectedTrigger';
 
 chrome.runtime.onMessage.addListener(function(request, _, sendResponse) {
   const resolver = ACTION_RESOLVERS[request.action] || ACTION_RESOLVERS.default;
@@ -7,4 +7,4 @@ chrome.runtime.onMessage.addListener(function(request, _, sendResponse) {
   resolver(request.payload, sendResponse, request.action);
 });
 
-insertTrigger();
+insertTriggers();

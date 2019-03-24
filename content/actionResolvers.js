@@ -2,15 +2,16 @@ import { WRITE_DOM, ASK_FOR_BODY, ASK_FOR_TITLE } from '../actions';
 
 import { getBody, getPRTitle } from './getDomComponents';
 
-const insertMDCode = mdCode => {
-  const prBody = getBody();
-  const currentValue = prBody.value;
+const noOp = () => {};
 
-  prBody.value = `${currentValue}\n${mdCode}`;
+const insertMDCode = ({ mdCode, targetInput = getBody() }) => {
+  const currentValue = targetInput.value;
+
+  targetInput.value = `${currentValue}\n${mdCode}`;
 };
 
 export const ACTION_RESOLVERS = {
-  [WRITE_DOM]: (payload, next) => {
+  [WRITE_DOM]: (payload, next = noOp) => {
     try {
       insertMDCode(payload);
       next({ ok: true });
@@ -18,7 +19,7 @@ export const ACTION_RESOLVERS = {
       next({ ok: false, error });
     }
   },
-  [ASK_FOR_BODY]: (_, next) => {
+  [ASK_FOR_BODY]: (_, next = noOp) => {
     try {
       getBody();
       next({ ok: true });
@@ -26,7 +27,7 @@ export const ACTION_RESOLVERS = {
       next({ ok: false, error });
     }
   },
-  [ASK_FOR_TITLE]: (_, next) => {
+  [ASK_FOR_TITLE]: (_, next = noOp) => {
     try {
       const title = getPRTitle();
       next({ ok: true, payload: { title } });

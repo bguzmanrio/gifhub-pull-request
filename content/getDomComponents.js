@@ -18,18 +18,36 @@ export const getBody = () => {
   return prBody;
 };
 
-export const getButtonFooter = () => {
+export const getPrBodyNodes = () => {
   const prButtonFooter = document.querySelector('.comment-form-actions') || document.querySelector('.form-actions');
 
   if (!prButtonFooter) {
-    throw new Error('No button footer found!');
+    console.log('No button footer found!');
   }
 
-  return prButtonFooter;
+  return {
+    container: prButtonFooter,
+    targetInput: getBody()
+  };
+};
+
+export const getNewCommentNodes = () => {
+  const commentFooter = document.querySelector('.js-new-comment-form .timeline-comment .form-actions');
+  const targetInput = document.querySelector('#new_comment_field');
+
+  if (!commentFooter) {
+    console.log('No comment footer found!');
+  }
+
+  return {
+    container: commentFooter,
+    targetInput
+  };
 };
 
 export default {
   getPRTitle,
   getBody,
-  getButtonFooter
+  getPrBodyNodes,
+  getNewCommentNodes
 };

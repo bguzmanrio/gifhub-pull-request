@@ -16,7 +16,7 @@ const requestToChrome = (payload) => new Promise((resolve, reject) => {
   });
 });
 
-export const appendMDToPr = mdCode => requestToChrome({ action: WRITE_DOM, payload: mdCode });
+export const appendMDToPr = payload => requestToChrome({ action: WRITE_DOM, payload });
 
 export const hasPRBody = () => requestToChrome({ action: ASK_FOR_BODY });
 

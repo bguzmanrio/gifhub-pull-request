@@ -6,93 +6,91 @@ import { requestGIF } from '../app/utils/requestGif';
 import { WRITE_DOM } from '../actions';
 
 import { ACTION_RESOLVERS } from './actionResolvers';
-import { getButtonFooter } from './getDomComponents';
+import { getPrBodyNodes, getNewCommentNodes } from './getDomComponents';
 
-const MAX_WIDTH_ALLOWED = 350;
+import InjectedExtension from './InjectedApp';
 
-const getMaxWidth = maxWidth => Math.min(MAX_WIDTH_ALLOWED, maxWidth);
+const CUSTOM_EVENT = 'refresh:gif';
 
-const getInjectedWrapperStyle = maxWidth => ({
-  alignItems: 'center',
-  backgroundColor: '#fff',
-  border: '1px solid #d1d5da',
-  borderRadius: '3px',
-  display: 'flex',
-  flexDirection: 'column',
-  padding: '5px',
-  maxWidth: getMaxWidth(maxWidth)
-});
-
-const imgStyle = {
-  marginBottom: '5px',
-  maxWidth: '100%'
+const withParentNode = fn => (parentNode, ...rest) => {
+  if (parentNode) {
+    fn(parentNode, ...rest);
+  }
 };
 
-const InjectedExtension = ({ gif, handleRefreshGif, handleCancel, maxWidth }) => (
-  <div style={getInjectedWrapperStyle(maxWidth)}>
-    <img style={imgStyle} src={gif.gifUrl}></img>
-    <div className="clearfix">
-      <button
-        className="btn btn-primary"
-        onClick={e => {
-          e.preventDefault();
-          ACTION_RESOLVERS[WRITE_DOM](gif.mdCode, () => {})
-        }}
-      >
-        Add GIF
-      </button>
-      <button className="btn btn-danger" onClick={handleCancel}>
-        Cancel
-      </button>
-      <button className="btn" onClick={handleRefreshGif}>
-        Moar GIF
-      </button>
-    </div>
-  </div>
-);
-
-export const insertTrigger = () => {
-  const buttonFooter = getButtonFooter();
+const createTriggerButton = () => {
   const triggerButton = document.createElement('button');
+  triggerButton.className = 'btn';
+  triggerButton.style.marginRight = '5px';
+  triggerButton.innerHTML = 'Find GIF';
+
+  return triggerButton;
+};
+
+const createAppWrapper = () => {
   const appWrapper = document.createElement('div');
-  const triggerButtonDispatcher = e => {
-    e.preventDefault();
-    triggerButton.dispatchEvent(new Event('click'));
-  };
-  const emptyInjectedApp = e => {
-    e.preventDefault();
-    unmountComponentAtNode(appWrapper);
-  };
   appWrapper.style.position = 'absolute';
   appWrapper.style.top = '100%';
   appWrapper.style.right = 0;
   appWrapper.style.zIndex = 9999;
+
+  return appWrapper;
+};
+
+const insertTrigger = withParentNode(({ container, targetInput }, { showInput } = {}) => {
+  const triggerButton = createTriggerButton();
+  const appWrapper = createAppWrapper();
+
+  const triggerButtonDispatcher = newSearch => {
+    triggerButton.dispatchEvent(new CustomEvent(CUSTOM_EVENT, { detail: { keyword: newSearch } }));
+  };
+  const emptyInjectedApp = e => {
+    e && e.preventDefault();
+    unmountComponentAtNode(appWrapper);
+  };
+  
   document.addEventListener('click', e => {
     if (appWrapper.innerHTML && !appWrapper.contains(e.target)) {
       emptyInjectedApp(e);
     }
   });
-  triggerButton.addEventListener('click', e => {
+
+  const renderApp = (e) => {
     e.preventDefault();
-    requestGIF().then(newGif => {
+    const keyword = e.detail.keyword;
+    requestGIF(keyword).then(({ gifUrl, mdCode }) => {
+      const injectGIF = () => {
+        ACTION_RESOLVERS[WRITE_DOM]({ mdCode, targetInput }, () => emptyInjectedApp());
+      };
+
       render(
         <InjectedExtension
-          maxWidth={buttonFooter.clientWidth}
-          gif={newGif}
+          gifUrl={gifUrl}
+          maxWidth={container.clientWidth}
+          handleAccept={injectGIF}
           handleRefreshGif={triggerButtonDispatcher}
           handleCancel={emptyInjectedApp}
+          showInput={showInput}
         />,
         appWrapper
       );
-    })
-  })
-  triggerButton.className = 'btn';
-  triggerButton.style.marginRight = '5px';
-  triggerButton.innerHTML = 'Find GIF'
-  buttonFooter.appendChild(triggerButton);
-  buttonFooter.appendChild(appWrapper);
+    });
+  };
+  triggerButton.addEventListener('click', renderApp);
+  triggerButton.addEventListener(CUSTOM_EVENT, renderApp);
+
+  container.appendChild(triggerButton);
+  container.appendChild(appWrapper);
+});
+
+export const insertTriggers = () => {
+  const prBodyNodes = getPrBodyNodes();
+  const newCommentNodes = getNewCommentNodes();
+
+  insertTrigger(prBodyNodes);
+  insertTrigger(newCommentNodes, { showInput: true });
 };
 
 export default {
-  insertTrigger
+  insertTriggers
 };
