@@ -67,6 +67,11 @@ export const insertTrigger = () => {
   appWrapper.style.top = '100%';
   appWrapper.style.right = 0;
   appWrapper.style.zIndex = 9999;
+  document.addEventListener('click', e => {
+    if (appWrapper.innerHTML && !appWrapper.contains(e.target)) {
+      emptyInjectedApp(e);
+    }
+  });
   triggerButton.addEventListener('click', e => {
     e.preventDefault();
     requestGIF().then(newGif => {
