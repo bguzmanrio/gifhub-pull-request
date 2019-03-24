@@ -7,7 +7,7 @@ import Block from './components/Block';
 import Collaborate from './components/Collaborate';
 import Sponsor from './components/Sponsor';
 import Footer from './components/Footer';
-import Loading from './components/Loading';
+import LoadingImage from './components/LoadingImage';
 import Form from './components/Form';
 import { MainTitle, SecondaryTitle } from './components/Title';
 
@@ -73,7 +73,7 @@ class App extends Component {
   }
 
   handleMDAppend() {
-    appendMDToPr(this.state.mdCode)
+    appendMDToPr({ mdCode: this.state.mdCode })
       .then(() => {
         this.setState({
           inserted: true
@@ -89,10 +89,7 @@ class App extends Component {
   }
 
   render() {
-    const imgStyles = {
-      display: this.state.isLoaded ? 'block' : 'none',
-      textAlign: 'center'
-    };
+    const imgStyles = this.state.isLoaded ? {} : { display: 'none'};
 
     return (
       <div style={{minWidth: '400px'}}>
@@ -106,19 +103,20 @@ class App extends Component {
         </Form>
         {this.state.gifUrl && (
           <Fragment>
-            <Loading isLoaded={this.state.isLoaded} />
-            <div style={imgStyles}>
-              <img src={this.state.gifUrl} onLoad={this.handleImageLoad}/>
-              <Block vertical>
-                <CopyButton url={this.state.mdCode} copiedText="Copied!" copyText="Copy MarkDown code" />
-                <CopyButton url={this.state.gifUrl} copiedText="Copied!" copyText="Copy GIF URL" />
-                {this.state.ableToInsert && (
-                  <Button vertical onClick={this.handleMDAppend}>
-                    {this.state.inserted ? 'Inserted!' : 'Insert MD code!'}
-                  </Button>
-                )}
-              </Block>
-            </div>
+            <LoadingImage
+              isLoaded={this.state.isLoaded}
+              handleImageLoad={this.handleImageLoad}
+              imgSrc={this.state.gifUrl}
+            />
+            <Block vertical style={imgStyles}>
+              <CopyButton url={this.state.mdCode} copiedText="Copied!" copyText="Copy MarkDown code" />
+              <CopyButton url={this.state.gifUrl} copiedText="Copied!" copyText="Copy GIF URL" />
+              {this.state.ableToInsert && (
+                <Button vertical onClick={this.handleMDAppend}>
+                  {this.state.inserted ? 'Inserted!' : 'Insert MD code!'}
+                </Button>
+              )}
+            </Block>
           </Fragment>
         )}
         <Footer>
