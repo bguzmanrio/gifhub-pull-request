@@ -1,4 +1,9 @@
 # Gifhub Pull Request
+Integrated view
+
+![](https://lh3.googleusercontent.com/k5L1V9Q-KYd61iY7lwCkt3UfKxx7OoS4qxcSAij-Wr3tfMiStRwzrPLjQo4ju1g6x-dopyrL=w640-h400-e365)
+
+From the toolbar button
 
 ![](https://lh3.googleusercontent.com/CbkU5QBCEBuArD0dFeHTEmFREye_S1bWyBfwgGWD_pNrbw8fXl00095eRjC4_ekMJdMAljLLQw=w640-h400-e365)
 
