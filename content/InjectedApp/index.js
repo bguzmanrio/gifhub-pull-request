@@ -32,8 +32,8 @@ const searchWrapperStyle = {
   width: '100%'
 };
 
-const InjectedExtension = ({ gifUrl, handleRefreshGif, handleCancel, handleAccept, maxWidth, showInput }) => {
-  const [inputValue, handleInput] = useState('');
+const InjectedExtension = ({ gifUrl, handleRefreshGif, handleCancel, handleAccept, maxWidth, prTitle }) => {
+  const [inputValue, handleInput] = useState(prTitle);
   const requestGif = e => {
     e && e.preventDefault();
     handleRefreshGif(inputValue);
@@ -47,22 +47,20 @@ const InjectedExtension = ({ gifUrl, handleRefreshGif, handleCancel, handleAccep
 
   return (
     <div style={getInjectedWrapperStyle(maxWidth)}>
-      {showInput && (
-        <div style={searchWrapperStyle}>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Comment with a GIF..."
-            style={inputStyle}
-            value={inputValue}
-            onKeyDown={handleKeyDown}
-            onChange={e => handleInput(e.target.value)}
-          />
-          <button className="btn" onClick={requestGif}>
-            Moar GIF
-          </button>
-        </div>
-      )}
+      <div style={searchWrapperStyle}>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Comment with a GIF..."
+          style={inputStyle}
+          value={inputValue}
+          onKeyDown={handleKeyDown}
+          onChange={e => handleInput(e.target.value)}
+        />
+        <button className="btn" onClick={requestGif}>
+          Moar GIF
+        </button>
+      </div>
       <img style={imgStyle} src={gifUrl}></img>
       <div className="clearfix">
         <button
@@ -74,11 +72,6 @@ const InjectedExtension = ({ gifUrl, handleRefreshGif, handleCancel, handleAccep
         <button className="btn btn-danger" onClick={handleCancel}>
           Cancel
         </button>
-        {!showInput && (
-          <button className="btn" onClick={requestGif}>
-            Moar GIF
-          </button>
-        )}
       </div>
     </div>
   );

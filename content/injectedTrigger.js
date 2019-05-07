@@ -6,7 +6,7 @@ import { requestGIF } from '../app/utils/requestGif';
 import { WRITE_DOM } from '../actions';
 
 import { ACTION_RESOLVERS } from './actionResolvers';
-import { getPrBodyNodes, getNewCommentNodes, shouldPrependMainTrigger } from './getDomComponents';
+import { getPrBodyNodes, getNewCommentNodes, shouldPrependMainTrigger, getPRTitle } from './getDomComponents';
 
 import InjectedExtension from './InjectedApp';
 
@@ -37,7 +37,7 @@ const createAppWrapper = () => {
   return appWrapper;
 };
 
-const insertTrigger = withParentNode(({ container, targetInput }, { showInput, prepend } = {}) => {
+const insertTrigger = withParentNode(({ container, targetInput }, { prTitle, prepend } = {}) => {
   const triggerButton = createTriggerButton();
   const appWrapper = createAppWrapper();
 
@@ -70,7 +70,7 @@ const insertTrigger = withParentNode(({ container, targetInput }, { showInput, p
           handleAccept={injectGIF}
           handleRefreshGif={triggerButtonDispatcher}
           handleCancel={emptyInjectedApp}
-          showInput={showInput}
+          prTitle={prTitle}
         />,
         appWrapper
       );
@@ -91,8 +91,8 @@ export const insertTriggers = () => {
   const prBodyNodes = getPrBodyNodes();
   const newCommentNodes = getNewCommentNodes();
 
-  insertTrigger(prBodyNodes, { prepend: shouldPrependMainTrigger() });
-  insertTrigger(newCommentNodes, { showInput: true });
+  insertTrigger(prBodyNodes, { prTitle: getPRTitle(), prepend: shouldPrependMainTrigger() });
+  insertTrigger(newCommentNodes);
 };
 
 export default {
