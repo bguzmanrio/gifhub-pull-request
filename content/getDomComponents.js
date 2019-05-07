@@ -19,7 +19,8 @@ export const getBody = () => {
 };
 
 export const getPrBodyNodes = () => {
-  const prButtonFooter = document.querySelector('.comment-form-actions') || document.querySelector('.form-actions');
+  const submitPrButton = document.querySelector('#new_pull_request button[type="submit"]') || document.querySelector('div[id^="issue-"] div[data-preview-url] button[type="submit"]');
+  const prButtonFooter = submitPrButton.closest('div.d-flex') || submitPrButton.closest('div.flex-justify-end') || submitPrButton.parentElement;
 
   if (!prButtonFooter) {
     console.log('No button footer found!');
@@ -45,9 +46,12 @@ export const getNewCommentNodes = () => {
   };
 };
 
+export const shouldPrependMainTrigger = () => document.location.pathname.includes('/compare/');
+
 export default {
   getPRTitle,
   getBody,
   getPrBodyNodes,
-  getNewCommentNodes
+  getNewCommentNodes,
+  shouldPrependMainTrigger
 };

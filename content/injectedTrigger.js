@@ -6,15 +6,15 @@ import { requestGIF } from '../app/utils/requestGif';
 import { WRITE_DOM } from '../actions';
 
 import { ACTION_RESOLVERS } from './actionResolvers';
-import { getPrBodyNodes, getNewCommentNodes } from './getDomComponents';
+import { getPrBodyNodes, getNewCommentNodes, shouldPrependMainTrigger } from './getDomComponents';
 
 import InjectedExtension from './InjectedApp';
 
 const CUSTOM_EVENT = 'refresh:gif';
 
-const withParentNode = fn => (parentNode, ...rest) => {
-  if (parentNode) {
-    fn(parentNode, ...rest);
+const withParentNode = fn => ({ container, targetInput }, ...rest) => {
+  if (container && targetInput) {
+    fn({ container, targetInput }, ...rest);
   }
 };
 
@@ -37,7 +37,7 @@ const createAppWrapper = () => {
   return appWrapper;
 };
 
-const insertTrigger = withParentNode(({ container, targetInput }, { showInput } = {}) => {
+const insertTrigger = withParentNode(({ container, targetInput }, { showInput, prepend } = {}) => {
   const triggerButton = createTriggerButton();
   const appWrapper = createAppWrapper();
 
@@ -79,7 +79,11 @@ const insertTrigger = withParentNode(({ container, targetInput }, { showInput } 
   triggerButton.addEventListener('click', renderApp);
   triggerButton.addEventListener(CUSTOM_EVENT, renderApp);
 
-  container.appendChild(triggerButton);
+  if (prepend) {
+    container.prepend(triggerButton);
+  } else {
+    container.appendChild(triggerButton);
+  }
   container.appendChild(appWrapper);
 });
 
@@ -87,7 +91,7 @@ export const insertTriggers = () => {
   const prBodyNodes = getPrBodyNodes();
   const newCommentNodes = getNewCommentNodes();
 
-  insertTrigger(prBodyNodes);
+  insertTrigger(prBodyNodes, { prepend: shouldPrependMainTrigger() });
   insertTrigger(newCommentNodes, { showInput: true });
 };
 
