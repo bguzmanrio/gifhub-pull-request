@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node_modules/.bin/webpack-dev-server --mode development --open --hot",
     "build": "node_modules/.bin/webpack --config webpack.config.prod.babel.js --mode production",
+    "build:dev": "node_modules/.bin/webpack --config webpack.config.prod.babel.js --mode development",
     "serve": "node_modules/.bin/http-server ./dist"
   },
   "repository": {
