@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
+import { useImgRequestLoaded } from '../../common/utils/use-img-request-loaded';
 import LoadingImage from '../../common/components/LoadingImage';
+
+import Input from './components/Input';
+import GithubButton from './components/GithubButton';
 
 const MAX_WIDTH_ALLOWED = 350;
 const ENTER_KEY_CODE = 13;
@@ -23,72 +27,45 @@ const imgStyle = {
   maxWidth: '100%'
 };
 
-const inputStyle = {
-  flexGrow: '1',
-  marginRight: '5px'
-};
-
 const searchWrapperStyle = {
   display: 'flex',
   marginBottom: '5px',
   width: '100%'
 };
 
-const InjectedExtension = ({ handleRefreshGif, handleCancel, handleAccept, maxWidth, prTitle }) => {
+const InjectedExtension = ({ handleCancel, handleAccept, maxWidth, prTitle }) => {
   const [inputValue, handleInput] = useState(prTitle);
-  const [loading, setLoading] = useState(true);
-  const [gifInfo, setGifUrl] = useState({});
-  const requestGif = e => {
-    e && e.preventDefault();
-    setLoading(true);
-    handleRefreshGif(inputValue).then(({ gifUrl, mdCode }) => {
-      setGifUrl({gifUrl, mdCode});
-    });
-  };
+  const [gifInfo, loading, request] = useImgRequestLoaded(inputValue);
 
   useEffect(() => {
-    return requestGif();
+    return request();
   }, []);
 
   const handleKeyDown = (e) => {
     if (e.keyCode === ENTER_KEY_CODE) {
-      requestGif(e);
+      request(e);
     }
-  }
+  };
 
   return (
     <div style={getInjectedWrapperStyle(maxWidth)}>
       <div style={searchWrapperStyle}>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Comment with a GIF..."
-          style={inputStyle}
-          value={inputValue}
-          onKeyDown={handleKeyDown}
-          onChange={e => handleInput(e.target.value)}
+        <Input
+          inputValue={inputValue}
+          handleKeyDown={handleKeyDown}
+          handleInput={handleInput}
         />
-        <button className="btn" onClick={requestGif}>
-          Moar GIF
-        </button>
+        <GithubButton onClick={request} />
       </div>
       <LoadingImage
         isLoaded={!loading}
-        handleImageLoad={() => setLoading(false)}
         imgSrc={gifInfo.gifUrl}
         imgStyle={imgStyle}
+        loadingStyle={{ marginBottom: '5px', borderRadius: '50%' }}
       />
-      
       <div className="clearfix">
-        <button
-          className="btn btn-primary"
-          onClick={() => handleAccept(gifInfo.mdCode)}
-        >
-          Add GIF
-        </button>
-        <button className="btn btn-danger" onClick={handleCancel}>
-          Cancel
-        </button>
+        <GithubButton action="primary" onClick={() => handleAccept(gifInfo.mdCode)} />
+        <GithubButton action="danger" onClick={handleCancel} />
       </div>
     </div>
   );

@@ -1,8 +1,6 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 
-import { requestGIF } from '../common/utils/requestGif';
-
 import { WRITE_DOM } from '../actions';
 
 import { ACTION_RESOLVERS } from './actionResolvers';
@@ -61,7 +59,6 @@ const insertTrigger = withParentNode(({ container, targetInput }, { prTitle, pre
       <InjectedExtension
         maxWidth={container.clientWidth}
         handleAccept={injectGIF}
-        handleRefreshGif={requestGIF}
         handleCancel={emptyInjectedApp}
         prTitle={prTitle}
       />,
