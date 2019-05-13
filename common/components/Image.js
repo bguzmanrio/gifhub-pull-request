@@ -1,7 +1,5 @@
-import styled from '@emotion/styled';
+import React from 'react';
 
-const Image = styled('img')`
-  margin: auto;
-`;
+const Image = ({ style = {}, ...restProps }) => <img {...restProps} style={{ margin: 'auto', ...style }}/>
 
 export default Image;
