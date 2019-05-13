@@ -4,10 +4,17 @@ import { getBody, getPRTitle } from './getDomComponents';
 
 const noOp = () => {};
 
+const simulateChange = targetInput => {
+  const parentForm = targetInput.closest('form');
+  if(parentForm) {
+    parentForm.dispatchEvent(new Event('change'));
+  }
+};
+
 const insertMDCode = ({ mdCode, targetInput = getBody() }) => {
   const currentValue = targetInput.value;
-
-  targetInput.value = `${currentValue}\n${mdCode}`;
+  targetInput.value = `${currentValue}${mdCode}`;
+  simulateChange(targetInput);
 };
 
 export const ACTION_RESOLVERS = {

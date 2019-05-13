@@ -46,35 +46,32 @@ const insertTrigger = withParentNode(({ container, targetInput }, { prTitle, pre
   };
   const emptyInjectedApp = e => {
     e && e.preventDefault();
+
     unmountComponentAtNode(appWrapper);
   };
   
   document.addEventListener('click', e => {
-    if (appWrapper.innerHTML && !appWrapper.contains(e.target)) {
+    if (appWrapper.innerHTML && !appWrapper.contains(e.target) && triggerButton !== e.target) {
       emptyInjectedApp(e);
     }
   });
 
   const renderApp = (e) => {
     e.preventDefault();
-    const keyword = e.detail.keyword;
-    requestGIF(keyword).then(({ gifUrl, mdCode }) => {
-      const injectGIF = () => {
-        ACTION_RESOLVERS[WRITE_DOM]({ mdCode, targetInput }, () => emptyInjectedApp());
-      };
+    const injectGIF = mdCode => {
+      ACTION_RESOLVERS[WRITE_DOM]({ mdCode, targetInput }, () => emptyInjectedApp());
+    };
 
-      render(
-        <InjectedExtension
-          gifUrl={gifUrl}
-          maxWidth={container.clientWidth}
-          handleAccept={injectGIF}
-          handleRefreshGif={triggerButtonDispatcher}
-          handleCancel={emptyInjectedApp}
-          prTitle={prTitle}
-        />,
-        appWrapper
-      );
-    });
+    render(
+      <InjectedExtension
+        maxWidth={container.clientWidth}
+        handleAccept={injectGIF}
+        handleRefreshGif={requestGIF}
+        handleCancel={emptyInjectedApp}
+        prTitle={prTitle}
+      />,
+      appWrapper
+    );
   };
   triggerButton.addEventListener('click', renderApp);
   triggerButton.addEventListener(CUSTOM_EVENT, renderApp);

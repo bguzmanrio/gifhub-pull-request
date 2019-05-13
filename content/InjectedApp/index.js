@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const MAX_WIDTH_ALLOWED = 350;
 const ENTER_KEY_CODE = 13;
@@ -32,12 +32,19 @@ const searchWrapperStyle = {
   width: '100%'
 };
 
-const InjectedExtension = ({ gifUrl, handleRefreshGif, handleCancel, handleAccept, maxWidth, prTitle }) => {
+const InjectedExtension = ({ handleRefreshGif, handleCancel, handleAccept, maxWidth, prTitle }) => {
   const [inputValue, handleInput] = useState(prTitle);
+  const [gifInfo, setGifUrl] = useState({});
   const requestGif = e => {
     e && e.preventDefault();
-    handleRefreshGif(inputValue);
+    handleRefreshGif(inputValue).then(({ gifUrl, mdCode }) => {
+      setGifUrl({gifUrl, mdCode});
+    });
   };
+
+  useEffect(() => {
+    return requestGif();
+  }, []);
 
   const handleKeyDown = (e) => {
     if (e.keyCode === ENTER_KEY_CODE) {
@@ -61,11 +68,11 @@ const InjectedExtension = ({ gifUrl, handleRefreshGif, handleCancel, handleAccep
           Moar GIF
         </button>
       </div>
-      <img style={imgStyle} src={gifUrl}></img>
+      <img style={imgStyle} src={gifInfo.gifUrl}></img>
       <div className="clearfix">
         <button
           className="btn btn-primary"
-          onClick={handleAccept}
+          onClick={() => handleAccept(gifInfo.mdCode)}
         >
           Add GIF
         </button>

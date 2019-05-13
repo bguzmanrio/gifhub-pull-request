@@ -2,7 +2,6 @@ const TITLE_REG_EXP = /PR[\s-]\d*[:]*[\s]*/gmi;
 
 const parsePRTitle = prTitle => prTitle.replace(TITLE_REG_EXP, '');
 
-
 export const getPRTitle = () => {
   const title = document.querySelector('#pull_request_title') || document.querySelector('[name="issue[title]"]') || {};
   return parsePRTitle(title.value || '');
