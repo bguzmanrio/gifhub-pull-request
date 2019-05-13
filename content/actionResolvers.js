@@ -13,7 +13,7 @@ const simulateChange = targetInput => {
 
 const insertMDCode = ({ mdCode, targetInput = getBody() }) => {
   const currentValue = targetInput.value;
-  targetInput.value = `${currentValue}${mdCode}`;
+  targetInput.value = `${currentValue}\n${mdCode}`;
   simulateChange(targetInput);
 };
 

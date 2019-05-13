@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getURL } from '../../common/utils/chromeConnector';
+import { getURL } from '../utils/chromeConnector';
 
 import Image from './Image';
 

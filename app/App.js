@@ -1,5 +1,9 @@
 import React, { Component, Fragment } from 'react';
 
+import LoadingImage from '../common/components/LoadingImage';
+import { getTitleFromPr, appendMDToPr, hasPRBody } from '../common/utils/chromeConnector';
+import { requestGIF } from '../common/utils/requestGif';
+
 import Button from './components/Button';
 import CopyButton from './components/CopyButton';
 import Input from './components/Input';
@@ -7,12 +11,8 @@ import Block from './components/Block';
 import Collaborate from './components/Collaborate';
 import Sponsor from './components/Sponsor';
 import Footer from './components/Footer';
-import LoadingImage from './components/LoadingImage';
 import Form from './components/Form';
 import { MainTitle, SecondaryTitle } from './components/Title';
-
-import { getTitleFromPr, appendMDToPr, hasPRBody } from './utils/chromeConnector';
-import { requestGIF } from './utils/requestGif';
 
 import './styles';
 

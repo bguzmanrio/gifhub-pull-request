@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 
-import { requestGIF } from '../app/utils/requestGif';
+import { requestGIF } from '../common/utils/requestGif';
 
 import { WRITE_DOM } from '../actions';
 
@@ -9,8 +9,6 @@ import { ACTION_RESOLVERS } from './actionResolvers';
 import { getPrBodyNodes, getNewCommentNodes, shouldPrependMainTrigger, getPRTitle } from './getDomComponents';
 
 import InjectedExtension from './InjectedApp';
-
-const CUSTOM_EVENT = 'refresh:gif';
 
 const withParentNode = fn => ({ container, targetInput }, ...rest) => {
   if (container && targetInput) {
@@ -41,9 +39,6 @@ const insertTrigger = withParentNode(({ container, targetInput }, { prTitle, pre
   const triggerButton = createTriggerButton();
   const appWrapper = createAppWrapper();
 
-  const triggerButtonDispatcher = newSearch => {
-    triggerButton.dispatchEvent(new CustomEvent(CUSTOM_EVENT, { detail: { keyword: newSearch } }));
-  };
   const emptyInjectedApp = e => {
     e && e.preventDefault();
 
@@ -73,8 +68,8 @@ const insertTrigger = withParentNode(({ container, targetInput }, { prTitle, pre
       appWrapper
     );
   };
+  
   triggerButton.addEventListener('click', renderApp);
-  triggerButton.addEventListener(CUSTOM_EVENT, renderApp);
 
   if (prepend) {
     container.prepend(triggerButton);

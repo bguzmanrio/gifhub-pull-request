@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import LoadingImage from '../../common/components/LoadingImage';
+
 const MAX_WIDTH_ALLOWED = 350;
 const ENTER_KEY_CODE = 13;
 
@@ -34,9 +36,11 @@ const searchWrapperStyle = {
 
 const InjectedExtension = ({ handleRefreshGif, handleCancel, handleAccept, maxWidth, prTitle }) => {
   const [inputValue, handleInput] = useState(prTitle);
+  const [loading, setLoading] = useState(true);
   const [gifInfo, setGifUrl] = useState({});
   const requestGif = e => {
     e && e.preventDefault();
+    setLoading(true);
     handleRefreshGif(inputValue).then(({ gifUrl, mdCode }) => {
       setGifUrl({gifUrl, mdCode});
     });
@@ -68,7 +72,13 @@ const InjectedExtension = ({ handleRefreshGif, handleCancel, handleAccept, maxWi
           Moar GIF
         </button>
       </div>
-      <img style={imgStyle} src={gifInfo.gifUrl}></img>
+      <LoadingImage
+        isLoaded={!loading}
+        handleImageLoad={() => setLoading(false)}
+        imgSrc={gifInfo.gifUrl}
+        imgStyle={imgStyle}
+      />
+      
       <div className="clearfix">
         <button
           className="btn btn-primary"

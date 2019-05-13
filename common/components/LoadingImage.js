@@ -3,9 +3,9 @@ import React, { Fragment } from 'react';
 import Loading from './Loading';
 import Image from './Image';
 
-const LoadingImage = ({ isLoaded, handleImageLoad, imgSrc }) => {
-  const loadingStyles = { display: isLoaded ? 'none' : 'block'};
-  const imageStyles = { display: isLoaded ? 'block' : 'none'};
+const LoadingImage = ({ isLoaded, handleImageLoad, imgSrc, imgStyle = {}, loadingStyle = {} }) => {
+  const loadingStyles = { display: isLoaded ? 'none' : 'block', ...loadingStyle };
+  const imageStyles = { display: isLoaded ? 'block' : 'none', ...imgStyle };
   
   return (
     <Fragment>

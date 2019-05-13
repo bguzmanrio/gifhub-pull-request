@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
-import { openURL } from '../utils/chromeConnector';
+import { openURL } from '../../common/utils/chromeConnector';
 
 import Button from './Button';
 
