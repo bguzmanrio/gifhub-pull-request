@@ -4,7 +4,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { WRITE_DOM } from '../actions';
 
 import { ACTION_RESOLVERS } from './actionResolvers';
-import { getPrBodyNodes, getNewCommentNodes, shouldPrependMainTrigger, getPRTitle } from './getDomComponents';
+import { getPrBodyNodes, getNewCommentNodes, isCreatingPR, getPRTitle } from './getDomComponents';
 
 import InjectedExtension from './InjectedApp';
 
@@ -80,7 +80,7 @@ export const insertTriggers = () => {
   const prBodyNodes = getPrBodyNodes();
   const newCommentNodes = getNewCommentNodes();
 
-  insertTrigger(prBodyNodes, { prTitle: getPRTitle(), prepend: shouldPrependMainTrigger() });
+  insertTrigger(prBodyNodes, { prTitle: getPRTitle(), prepend: isCreatingPR() });
   insertTrigger(newCommentNodes);
 };
 
