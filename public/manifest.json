@@ -1,6 +1,6 @@
 {
   "name": "Gifhub Pull Request",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Find the best GIFs for your awesome pull requests",
   "manifest_version": 2,
   "permissions": [
